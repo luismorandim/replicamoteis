@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:replicamoteis/providers/motel_provider.dart';
+import 'package:replicamoteis/widgets/date_selection_manager.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MotelProvider()),
+        ChangeNotifierProvider(create: (context) => DateSelectionManager()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

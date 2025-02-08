@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:replicamoteis/widgets/filtro_widget.dart';
 import '../models/motel.dart';
 import '../service/motel_service.dart';
+import '../widgets/app_bar_custom.dart';
 import '../widgets/motel_highlight_card.dart';
 import '../widgets/motel_card.dart';
 
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: CustomAppBar(),
       body: FutureBuilder<List<Motel>>(
         future: _futureMoteis,
         builder: (context, snapshot) {
@@ -38,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return Column(
             children: [
-              MotelHighlightCard(motel: moteis.first), // Primeiro bloco
-              FiltersBar(), // Barra de Filtros
+              MotelHighlightCard(motel: moteis.first),
+              FiltersBar(),
               Expanded(
                 child: ListView.builder(
                   itemCount: moteis.length,
@@ -60,15 +61,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      title: const Text("Ir Agora"),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
 }
