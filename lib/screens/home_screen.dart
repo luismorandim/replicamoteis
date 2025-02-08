@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:replicamoteis/widgets/filtro_widget.dart';
 import '../models/motel.dart';
 import '../service/motel_service.dart';
+import '../widgets/motel_highlight_card.dart';
+import '../widgets/motel_card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Motéis Disponíveis")),
+      appBar: _buildAppBar(),
       body: FutureBuilder<List<Motel>>(
         future: _futureMoteis,
         builder: (context, snapshot) {
@@ -33,39 +36,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
           List<Motel> moteis = snapshot.data!;
 
-          return ListView.builder(
-            itemCount: moteis.length,
-            itemBuilder: (context, index) {
-              final motel = moteis[index];
-
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: ExpansionTile(
-                  leading: Image.network(motel.logo, width: 50, height: 50, fit: BoxFit.cover),
-                  title: Text(motel.fantasia, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(motel.bairro),
-                      Text("Distância: ${motel.distancia} km"),
-                      Text("Avaliação: ${motel.media} ⭐"),
-                    ],
-                  ),
-                  children: motel.suites.map((suite) {
-                    return ListTile(
-                      title: Text(suite.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text("Disponíveis: ${suite.qtd}"),
-                      trailing: Icon(Icons.hotel),
-                      onTap: () {
-                      },
+          return Column(
+            children: [
+              MotelHighlightCard(motel: moteis.first), // Primeiro bloco
+              FiltersBar(), // Barra de Filtros
+              Expanded(
+                child: ListView.builder(
+                  itemCount: moteis.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        MotelCard(motel: moteis[index]),
+                        SizedBox(height: 10),
+                      ],
                     );
-                  }).toList(),
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: const Text("Ir Agora"),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }
