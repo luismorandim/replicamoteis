@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:replicamoteis/widgets/suite_carrousel.dart';
 import '../models/motel.dart';
+import '../screens/suite_details_screen.dart';
+import '../widgets/suite_itens_widget.dart';
+import '../widgets/periodos_widget.dart';
 
 class MotelCard extends StatelessWidget {
   final Motel motel;
@@ -10,7 +13,7 @@ class MotelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      color: Colors.grey.shade100,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
@@ -54,7 +57,36 @@ class MotelCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            SuiteCarousel(suites: motel.suites),
+
+            SizedBox(
+              height: 550,
+              child: PageView.builder(
+                itemCount: motel.suites.length,
+                controller: PageController(viewportFraction: 0.9),
+                itemBuilder: (context, index) {
+                  final suite = motel.suites[index];
+                  return Column(
+                    children: [
+                      SuiteCarousel(suites: motel.suites[index]),
+                      SizedBox(height: 10),
+                      SuiteItensWidget(
+                        categoriaItens: motel.suites.first.categoriaItens,
+                        onVerTodos: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SuiteDetailsScreen(suite: suite),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      PeriodosWidget(periodos: suite.periodos),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
