@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(),
       body: FutureBuilder<List<Motel>>(
         future: _futureMoteis,

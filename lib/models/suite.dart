@@ -1,12 +1,14 @@
-import 'package:replicamoteis/models/periodo.dart';
+import 'categoria_item.dart';
+import 'suite_item.dart';
+import 'periodo.dart';
 
 class Suite {
   final String nome;
   final int qtd;
   final bool exibirQtdDisponiveis;
   final List<String> fotos;
-  final List<String> itens;
-  final List<Map<String, String>> categoriaItens;
+  final List<SuiteItem> itens;
+  final List<CategoriaItem> categoriaItens;
   final List<Periodo> periodos;
 
   Suite({
@@ -21,17 +23,15 @@ class Suite {
 
   factory Suite.fromJson(Map<String, dynamic> json) {
     return Suite(
-      nome: json['nome'] ?? '',
-      qtd: json['qtd'] ?? 0,
-      exibirQtdDisponiveis: json['exibirQtdDisponiveis'] ?? false,
-      fotos: List<String>.from(json['fotos'] ?? []),
-      itens: (json['itens'] as List<dynamic>).map((e) => e['nome'].toString()).toList(),
-      categoriaItens: (json['categoriaItens'] as List<dynamic>)
-          .map((e) => {'nome': e['nome'].toString(), 'icone': e['icone'].toString()})
+      nome: json["nome"],
+      qtd: json["qtd"],
+      exibirQtdDisponiveis: json["exibirQtdDisponiveis"],
+      fotos: List<String>.from(json["fotos"]),
+      itens: (json["itens"] as List).map((item) => SuiteItem.fromJson(item)).toList(),
+      categoriaItens: (json["categoriaItens"] as List)
+          .map((item) => CategoriaItem.fromJson(item))
           .toList(),
-      periodos: (json['periodos'] as List<dynamic>).map((e) => Periodo.fromJson(e)).toList(),
+      periodos: (json["periodos"] as List).map((p) => Periodo.fromJson(p)).toList(),
     );
   }
 }
-
-
