@@ -51,303 +51,299 @@ class _SuiteReservaScreenState extends State<SuiteReservaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      body: Column(
-        children: [
-          Card(
-            color: Colors.white,
-            margin: EdgeInsets.zero,
-            elevation: 4,
-            child: Column(
-              children: [
-                // **Carrossel de Imagens**
-                Stack(
-                  children: [
-                    SizedBox(
-                      height: 250,
-                      width: double.infinity,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: widget.suite.fotos.length,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                        itemBuilder: (context, index) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                            child: Image.network(
-                              widget.suite.fotos[index],
-                              width: double.infinity,
-                              height: 250,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Card(
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              elevation: 4,
+              child: Column(
+                children: [
+                  // **Carrossel de Imagens**
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 250,
+                        width: double.infinity,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: widget.suite.fotos.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                              child: Image.network(
+                                widget.suite.fotos[index],
+                                width: double.infinity,
+                                height: 250,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
 
-                    if (widget.suite.fotos.length > 1) ...[
                       Positioned(
+                        top: 40,
                         left: 10,
-                        top: 100,
                         child: IconButton(
                           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                          onPressed: _prevImage,
+                          onPressed: () {
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                          },
                         ),
                       ),
-                      Positioned(
-                        right: 10,
-                        top: 100,
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                          onPressed: _nextImage,
-                        ),
-                      ),
-                    ],
 
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          widget.suite.fotos.length,
-                              (index) => Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: _currentIndex == index ? 10 : 6,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: _currentIndex == index ? Colors.white : Colors.grey,
-                              shape: BoxShape.circle,
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            widget.suite.fotos.length,
+                                (index) => Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              width: _currentIndex == index ? 10 : 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: _currentIndex == index ? Colors.white : Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    ],
+                  )
+,
+        
+                  // **Nome da Suíte e Quantidade Disponível**
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.suite.nome,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        if (widget.suite.exibirQtdDisponiveis)
+                          Text(
+                            "Só mais ${widget.suite.qtd} pelo app",
+                            style: const TextStyle(color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                      ],
+                    ),
+                  ),
+        
+                  // **Itens da Suíte**
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuiteDetailsScreen(suite: widget.suite),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: widget.suite.categoriaItens
+                                    .where((item) => item.icone.isNotEmpty)
+                                    .map((item) => Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Image.network(
+                                    item.icone,
+                                    width: 36,
+                                    height: 36,
+                                  ),
+                                ))
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "ver",
+                                style: TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "todos",
+                                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Icon(Icons.expand_more, size: 16, color: Colors.grey),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              elevation: 4,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        widget.motel.logo,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                widget.motel.fantasia,
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(width: 5),
+                              Row(
+                                children: [
+                                  const Icon(Icons.star, color: Colors.amber, size: 16),
+                                  Text(" ${widget.motel.media}"),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "${widget.motel.distancia} km - ${widget.motel.bairro}",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: const [
+                        Text("mais info", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        SizedBox(width: 4),
+                        Icon(Icons.expand_more, size: 16, color: Colors.grey),
+                      ],
                     ),
                   ],
                 ),
-
-                // **Nome da Suíte e Quantidade Disponível**
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.suite.nome,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      if (widget.suite.exibirQtdDisponiveis)
-                        Text(
-                          "Só mais ${widget.suite.qtd} pelo app",
-                          style: const TextStyle(color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                    ],
-                  ),
-                ),
-
-                // **Itens da Suíte**
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SuiteDetailsScreen(suite: widget.suite),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: widget.suite.categoriaItens
-                                  .where((item) => item.icone.isNotEmpty)
-                                  .map((item) => Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: Image.network(
-                                  item.icone,
-                                  width: 36,
-                                  height: 36,
-                                ),
-                              ))
-                                  .toList(),
-                            ),
-                          ),
-                        ),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "ver",
+                              "início do período",
                               style: TextStyle(fontSize: 12, color: Colors.grey),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "todos",
-                                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                                ),
-                                SizedBox(width: 4),
-                                Icon(Icons.expand_more, size: 16, color: Colors.grey),
-                              ],
+                            SizedBox(height: 4),
+                            Text(
+                              "IMEDIATO",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
+                          ],
+                        ),
+                        const Icon(Icons.arrow_forward, size: 24, color: Colors.black),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              "período",
+                              style: TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.periodo.tempoFormatado.toUpperCase(),
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+        
                           ],
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            color: Colors.white,
-            margin: EdgeInsets.zero,
-            elevation: 4,
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.motel.logo,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
+                Card(
+                  color: Colors.white,
+                  margin: EdgeInsets.only(top: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              widget.motel.fantasia,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 5),
-                            Row(
-                              children: [
-                                const Icon(Icons.star, color: Colors.amber, size: 16),
-                                Text(" ${widget.motel.media}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "${widget.motel.distancia} km - ${widget.motel.bairro}",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
+                        _buildPriceRow("valor da suíte", widget.periodo.valor),
+                        const Divider(),
+                        _buildPriceRow("taxa de serviço", taxa, hasInfoIcon: true),
+                        const Divider(),
+                        _buildPriceRow("valor total da reserva", (widget.periodo.valorTotal+taxa), isBold: true),
+                        const SizedBox(height: 16),
+                        buildEtapasPagamento(taxa, widget.periodo.valorTotal),
                       ],
                     ),
                   ),
-                  Row(
-                    children: const [
-                      Text("mais info", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      SizedBox(width: 4),
-                      Icon(Icons.expand_more, size: 16, color: Colors.grey),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-            color: Colors.white,
-            margin: EdgeInsets.zero,
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            "início do período",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "IMEDIATO",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const Icon(Icons.arrow_forward, size: 24, color: Colors.black),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            "período",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            widget.periodo.tempoFormatado.toUpperCase(),
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-
-                        ],
-                      ),
-                    ],
-                  ),
-              Card(
-                color: Colors.white,
-                margin: EdgeInsets.only(top: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildPriceRow("valor da suíte", widget.periodo.valor),
-                      const Divider(),
-                      _buildPriceRow("taxa de serviço", taxa, hasInfoIcon: true),
-                      const Divider(),
-                      _buildPriceRow("valor total da reserva", (widget.periodo.valorTotal+taxa), isBold: true),
-                      const SizedBox(height: 16),
-
-                      // Seção de etapas de pagamento
-                      buildEtapasPagamento(taxa, widget.periodo.valorTotal),
-                    ],
-                  ),
+                ),
+                  ],
                 ),
               ),
-                ],
-              ),
             ),
-          ),
-          const SizedBox(height: 12),
-
-        ],
+            const SizedBox(height: 12),
+            buildAvisoSelinho(),
+        
+          ],
+        ),
       ),
     );
   }
@@ -493,5 +489,60 @@ Widget buildEtapasPagamento(double taxa, double valorTotal) {
         ],
       ),
     ],
+  );
+}
+
+
+Widget buildAvisoSelinho() {
+  return Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.red.shade50,
+      border: Border.all(color: Colors.red.shade300),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Icon(Icons.check, color: Colors.white, size: 16),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "você vai ganhar 1 selinho após sua hospedagem",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                "a cada 10 selinhos você ganha uma reserva grátis!",
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 4),
+              GestureDetector(
+                onTap: () {
+                },
+                child: const Text(
+                  "termos e condições",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
   );
 }
