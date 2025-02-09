@@ -82,6 +82,7 @@ class MotelCard extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       PeriodosWidget(
+                        motel: motel,
                         suite: suite,
                         periodos: suite.periodos,
                       ),

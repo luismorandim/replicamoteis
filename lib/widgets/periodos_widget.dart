@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/motel.dart';
 import '../models/periodo.dart';
 import '../models/suite.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +8,9 @@ import '../screens/suite_reserva_screen.dart';
 class PeriodosWidget extends StatelessWidget {
   final Suite suite;
   final List<Periodo> periodos;
+  final Motel motel;
 
-  const PeriodosWidget({Key? key, required this.suite, required this.periodos}) : super(key: key);
+  const PeriodosWidget({Key? key, required this.suite, required this.periodos, required this.motel}) : super(key: key);
 
   String formatCurrency(double value) {
     final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
@@ -27,6 +29,7 @@ class PeriodosWidget extends StatelessWidget {
                 builder: (context) => SuiteReservaScreen(
                   suite: suite,
                   periodo: periodo,
+                  motel: motel
                 ),
               ),
             );
