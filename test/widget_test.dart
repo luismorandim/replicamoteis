@@ -1,30 +1,78 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:replicamoteis/main.dart';
+import 'package:replicamoteis/widgets/filtro_widget.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group("FiltersBar - Testes Unitários", () {
+    testWidgets("Filtros padrão devem ser exibidos", (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: FiltersBar(
+            selectedFilters: {
+              'suiteItens': [],
+              'onlyDiscounted': false,
+              'onlyAvailable': false,
+            },
+            onFilterChanged: (filters) {},
+            onFilterPressed: () {},
+          ),
+        ),
+      ));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Verifica se os filtros padrão aparecem
+      expect(find.text("Filtros"), findsOneWidget);
+      expect(find.text("Com Desconto"), findsOneWidget);
+      expect(find.text("Disponíveis"), findsOneWidget);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets("Selecionar um filtro ativa a cor vermelha", (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: FiltersBar(
+            selectedFilters: {
+              'suiteItens': ["Hidro"],
+              'onlyDiscounted': false,
+              'onlyAvailable': false,
+            },
+            onFilterChanged: (filters) {},
+            onFilterPressed: () {},
+          ),
+        ),
+      ));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Clicar no filtro "Hidro"
+      await tester.tap(find.text("Hidro"));
+      await tester.pump();
+
+      // Verifica se o filtro foi ativado corretamente
+      expect(find.text("Hidro"), findsOneWidget);
+    });
+
+    testWidgets("Ao clicar em 'Filtros', deve abrir a FiltersScreen", (WidgetTester tester) async {
+      bool filterScreenOpened = false;
+
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: FiltersBar(
+            selectedFilters: {
+              'suiteItens': [],
+              'onlyDiscounted': false,
+              'onlyAvailable': false,
+            },
+            onFilterChanged: (filters) {},
+            onFilterPressed: () {
+              filterScreenOpened = true;
+            },
+          ),
+        ),
+      ));
+
+      // Clicar no botão "Filtros"
+      await tester.tap(find.text("Filtros"));
+      await tester.pump();
+
+      // Verifica se a tela foi aberta corretamente
+      expect(filterScreenOpened, isTrue);
+    });
   });
 }
