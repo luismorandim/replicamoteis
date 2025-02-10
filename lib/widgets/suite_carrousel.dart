@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/suite.dart';
 import '../screens/gallery_screen.dart';
-import '../screens/suite_details_screen.dart';
 
 class SuiteCarousel extends StatelessWidget {
   final Suite suites;

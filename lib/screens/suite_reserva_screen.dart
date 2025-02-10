@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:replicamoteis/screens/suite_details_screen.dart';
-import '../models/suite.dart';
 import '../models/periodo.dart';
 import '../models/motel.dart';
+import 'package:replicamoteis/models/suite.dart';
+
 
 class SuiteReservaScreen extends StatefulWidget {
   final Suite suite;
@@ -31,21 +32,7 @@ class _SuiteReservaScreenState extends State<SuiteReservaScreen> {
     _pageController = PageController();
   }
 
-  void _nextImage() {
-    if (_currentIndex < widget.suite.fotos.length - 1) {
-      _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-    } else {
-      _pageController.jumpToPage(0);
-    }
-  }
 
-  void _prevImage() {
-    if (_currentIndex > 0) {
-      _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-    } else {
-      _pageController.jumpToPage(widget.suite.fotos.length - 1);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

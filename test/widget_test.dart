@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:replicamoteis/widgets/filtro_widget.dart';
+import 'package:replicamoteis/screens/filter_screen.dart';
 
 void main() {
   group("FiltersBar - Testes Unitários", () {
@@ -19,7 +20,6 @@ void main() {
         ),
       ));
 
-      // Verifica se os filtros padrão aparecem
       expect(find.text("Filtros"), findsOneWidget);
       expect(find.text("Com Desconto"), findsOneWidget);
       expect(find.text("Disponíveis"), findsOneWidget);
@@ -40,39 +40,43 @@ void main() {
         ),
       ));
 
-      // Clicar no filtro "Hidro"
       await tester.tap(find.text("Hidro"));
       await tester.pump();
 
-      // Verifica se o filtro foi ativado corretamente
       expect(find.text("Hidro"), findsOneWidget);
     });
 
     testWidgets("Ao clicar em 'Filtros', deve abrir a FiltersScreen", (WidgetTester tester) async {
-      bool filterScreenOpened = false;
-
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-          body: FiltersBar(
-            selectedFilters: {
-              'suiteItens': [],
-              'onlyDiscounted': false,
-              'onlyAvailable': false,
-            },
-            onFilterChanged: (filters) {},
-            onFilterPressed: () {
-              filterScreenOpened = true;
+          body: Builder(
+            builder: (context) {
+              return FiltersBar(
+                selectedFilters: {
+                  'suiteItens': [],
+                  'onlyDiscounted': false,
+                  'onlyAvailable': false,
+                },
+                onFilterChanged: (filters) {},
+                onFilterPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FiltersScreen(
+                      initialFilters: {},
+                      onApplyFilters: (filters) {},
+                    )),
+                  );
+                },
+              );
             },
           ),
         ),
       ));
 
-      // Clicar no botão "Filtros"
       await tester.tap(find.text("Filtros"));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      // Verifica se a tela foi aberta corretamente
-      expect(filterScreenOpened, isTrue);
+      expect(find.byType(FiltersScreen), findsOneWidget);
     });
   });
 }

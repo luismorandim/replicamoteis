@@ -66,23 +66,25 @@ class _FiltersScreenState extends State<FiltersScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
-        children: [
-          _buildPriceSlider(),
-          _buildPeriodos(),
-          _buildSuiteItens(),
-          _buildSwitch("Somente suítes com desconto", _onlyDiscounted, (value) {
-            setState(() {
-              _onlyDiscounted = value;
-            });
-          }),
-          _buildSwitch("Somente suítes disponíveis", _onlyAvailable, (value) {
-            setState(() {
-              _onlyAvailable = value;
-            });
-          }),
-          _buildApplyButton(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildPriceSlider(),
+            _buildPeriodos(),
+            _buildSuiteItens(),
+            _buildSwitch("Somente suítes com desconto", _onlyDiscounted, (value) {
+              setState(() {
+                _onlyDiscounted = value;
+              });
+            }),
+            _buildSwitch("Somente suítes disponíveis", _onlyAvailable, (value) {
+              setState(() {
+                _onlyAvailable = value;
+              });
+            }),
+            _buildApplyButton(),
+          ],
+        ),
       ),
     );
   }
