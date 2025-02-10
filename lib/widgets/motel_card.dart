@@ -59,18 +59,19 @@ class MotelCard extends StatelessWidget {
             const SizedBox(height: 10),
 
             SizedBox(
-              height: 550,
-              child: PageView.builder(
+              height: motel.suites.isNotEmpty ? 550 : 0,
+              child: motel.suites.isNotEmpty
+                  ? PageView.builder(
                 itemCount: motel.suites.length,
                 controller: PageController(viewportFraction: 0.9),
                 itemBuilder: (context, index) {
                   final suite = motel.suites[index];
                   return Column(
                     children: [
-                      SuiteCarousel(suites: motel.suites[index]),
+                      SuiteCarousel(suites: suite),
                       SizedBox(height: 10),
                       SuiteItensWidget(
-                        categoriaItens: motel.suites.first.categoriaItens,
+                        categoriaItens: suite.categoriaItens,
                         onVerTodos: () {
                           Navigator.push(
                             context,
@@ -89,8 +90,10 @@ class MotelCard extends StatelessWidget {
                     ],
                   );
                 },
-              ),
+              )
+                  : const SizedBox(),
             ),
+
           ],
         ),
       ),
