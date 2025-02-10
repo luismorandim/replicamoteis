@@ -1,6 +1,7 @@
 # replicamoteis
 
-A new Flutter project.
+Réplica da tela de listagem de motéis (apenas a aba "Ir Agora") do aplicativo Guia de Motéis GO
+Feito usando flutter 3.27.1
 
 ## Getting Started
 
