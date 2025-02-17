@@ -3,15 +3,8 @@
 Réplica da tela de listagem de motéis (apenas a aba "Ir Agora") do aplicativo Guia de Motéis GO
 Feito usando flutter 3.27.1
 
-## Getting Started
+Em conjunto também deixo aqui dois vídeos, um da aplicação rodando e outro da parte de teste unitário
 
-This project is a starting point for a Flutter application.
+Aplicação: https://drive.google.com/file/d/1vn_Y2n74nsjqco7q0h9y9C7Ejd4cwVuq/view?usp=drive_link
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Teste: https://drive.google.com/file/d/1xE4yNg1PgQNj1xBCE9oPfxKOkda9PCrM/view?usp=drive_link
